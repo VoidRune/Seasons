@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Season Slider</title>
+<style>
+  
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+	overflow: hidden;
+  }
+
+  body {
+    --spring-opacity: 1;
+    --summer-opacity: 0;
+    --autumn-opacity: 0;
+    --winter-opacity: 0;
+    --snow-opacity: 0;
+  }
+  
+  
+  input[type="range"] {
+    width: 100%; /* Full width */
+    position: absolute;
+    top: 0;
+    left: 0;
+	  z-index: 1;
+  }
+
+  input[type="number"] {
+    position: absolute;
+    top: 80px;
+    left: 10px;
+	  z-index: 1;
+  }
+
+  button {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+	  z-index: 1;
+  }
+  
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+	object-fit: cover;
+    transform: translate(-50%, -50%);
+  }
+
+  #spring {
+    opacity: var(--spring-opacity)
+  }
+
+  #winter {
+    opacity: var(--winter-opacity)
+  }
+
+  #summer {
+    opacity: var(--summer-opacity)
+  }
+
+  #autumn {
+    opacity: var(--autumn-opacity)
+  }
+
+  .isolate {
+    isolation: isolate;
+  }
+
+  #snowOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background-image: url('snow03.gif');
+    opacity: var(--snow-opacity);
+    transition: opacity 0.5s ease;
+  }
+</style>
+</head>
+<body>
+<input type="range" min="0" max="9999" value="1" id="seasonSlider">
+<input type="number" min="2" max="20" value="10" id="speedInput">
+<button id="setAuto">Toggle automatic</button>
+<div class="isolate">
+  <img src="summer.svg" id="summer">
+
+  <img src="spring.svg" id="spring">
+  <img src="summer.svg" id="summer">
+  <img src="autumn.svg" id="autumn">
+  <img src="winter.svg" id="winter">
+  <div id="snowOverlay"></div>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('seasonSlider');
+    let animationTime = 10
+
+
+    slider.addEventListener('input', function() {
+      drawImages()
+
+    });
+
+    let isAuto = false
+
+    document.getElementById('setAuto').addEventListener('click', () => {
+      if(isAuto) {
+        isAuto = false;
+      } else {
+        isAuto=true
+
+        lastTime = performance.now() / 1000
+    window.requestAnimationFrame(increase)
+      }
+  })
+
+  let speedInput = document.getElementById('speedInput')
+
+  speedInput.addEventListener('input', function() {
+      
+    animationTime = speedInput.value
+    });
+
+  function easeInOutCubic(x) {
+    return x
+  }
+
+  let lastTime = performance.now() / 1000
+  let sliderValue = 0
+
+
+  function increase() {
+    if(!isAuto) {
+      return
+    }
+    let time = performance.now() / 1000;
+    let dt = time - lastTime;
+    lastTime = time;
+
+    console.log(dt)
+
+    
+    sliderValue += dt *( 1/animationTime)
+
+    if((sliderValue) >= 1) {
+      sliderValue = 0
+    }
+
+    console.log(sliderValue)
+
+    slider.value = sliderValue * slider.max
+
+    drawImages()
+    
+    window.requestAnimationFrame(increase)
+  }
+
+  function drawImages() {
+    // Value od 0 do 1, kjer je 0 spring in 1 winter
+    let seasonIndex = slider.value / slider.max
+
+    let summerOpacity = 0;
+    let springOpacity = 0;
+    let autumnOpacity = 0;
+    let winterOpacity = 0;
+
+    if(seasonIndex <= 0.25) {
+      let currentSeasonIndex = easeInOutCubic(seasonIndex / 0.25)
+      springOpacity = 1 - currentSeasonIndex
+      summerOpacity = currentSeasonIndex
+
+    } else if(seasonIndex <= 0.5) {
+      let currentSeasonIndex = easeInOutCubic((seasonIndex - 0.25) / 0.25)
+      summerOpacity = 1 - currentSeasonIndex
+      autumnOpacity = currentSeasonIndex
+
+    } else if(seasonIndex <= 0.75) {
+      let currentSeasonIndex = easeInOutCubic((seasonIndex - 0.5) / 0.25)
+      autumnOpacity = 1 - currentSeasonIndex
+      winterOpacity = currentSeasonIndex
+    } else {
+      let currentSeasonIndex = easeInOutCubic((seasonIndex - 0.75) / 0.25)
+      winterOpacity = 1 - currentSeasonIndex
+      springOpacity = currentSeasonIndex
+    }
+
+    var root = document.body;
+    root.style.setProperty('--spring-opacity', springOpacity);
+    root.style.setProperty('--summer-opacity', summerOpacity);
+    root.style.setProperty('--autumn-opacity', autumnOpacity);
+    root.style.setProperty('--winter-opacity', winterOpacity);
+
+    if(seasonIndex > 0.5 && seasonIndex < 0.75) {
+      root.style.setProperty('--snow-opacity', 1);
+
+    } else {
+      root.style.setProperty('--snow-opacity', 0);
+    }
+
+  }
+  });
+
+  
+  </script>
+</body>
+</html>
