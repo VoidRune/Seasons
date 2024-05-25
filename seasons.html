@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Parisienne&family=Sedan:ital@0;1&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
 <title>Season Slider</title>
+
 <style>
   
   body, html {
@@ -12,34 +16,32 @@
 	overflow: hidden;
   }
 
+
+
   body {
     --spring-opacity: 1;
     --summer-opacity: 0;
     --autumn-opacity: 0;
     --winter-opacity: 0;
     --snow-opacity: 0;
+    --season-icon-color: green;
+    font-family: 'Helvetica', sans-serif;
   }
   
   
   input[type="range"] {
     width: 100%; /* Full width */
-    position: absolute;
-    top: 0;
-    left: 0;
+    
 	  z-index: 1;
   }
 
   input[type="number"] {
-    position: absolute;
-    top: 80px;
-    left: 10px;
+    
 	  z-index: 1;
   }
 
   button {
-    position: absolute;
-    top: 50px;
-    left: 10px;
+    
 	  z-index: 1;
   }
   
@@ -49,7 +51,7 @@
     left: 50%;
     width: 100%;
     height: 100%;
-	  object-fit: cover;
+	object-fit: cover;
     transform: translate(-50%, -50%);
   }
 
@@ -84,12 +86,70 @@
     opacity: var(--snow-opacity);
     transition: opacity 0.5s ease;
   }
+
+  #currentSeasonText {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  #currentSeasonText h1 {
+    
+    letter-spacing: 0;
+    line-height: 0;
+    font-size: 1.5rem; /* Adjust the font size as needed */
+    font-weight: bold;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #currentSeasonText i {
+    font-size: 2rem;
+    color: var(--season-icon-color)
+  }
+
+  #currentSeasonText .card {
+    background:white;
+    padding: 0rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: 0.25rem;
+    border: 1px solid gray;
+  }
+
+  #controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    padding: 0.5rem;
+    
+  }
+
 </style>
+<script src="https://kit.fontawesome.com/b6363674ea.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<input type="range" min="0" max="9999" value="1" id="seasonSlider">
-<input type="number" min="2" max="20" value="10" id="speedInput">
-<button id="setAuto">Toggle automatic</button>
+<div id="controls">
+
+  <input type="range" min="0" max="9999" value="1" id="seasonSlider">
+  <div id="currentSeasonText">
+    <div class="card">
+      <h1><i id="seasonIcon" class="fa-solid fa-seedling"></i> <span style="margin-top: 0.25rem" id="seasonTitle">Pomlad</span></h1>
+    </div>
+    <div>
+
+      <button id="setAuto" style="border-radius: 0.5rem;">Začni/ustavi predvajanje</button><br>
+      <label for="speedInput">Čas trajanja leta (v sekundah)</label><br>
+      <input type="number" min="1" max="20" value="10" id="speedInput">
+    </div>
+    
+  </div>
+
+</div>
+
 <div class="isolate">
   <img src="res/summer.svg" id="summer">
 
@@ -166,6 +226,9 @@
     window.requestAnimationFrame(increase)
   }
 
+  const seasonTitleElement = document.getElementById('seasonTitle')
+  const seasonIconElement = document.getElementById('seasonIcon')
+
   function drawImages() {
     // Value od 0 do 1, kjer je 0 spring in 1 winter
     let seasonIndex = slider.value / slider.max
@@ -175,24 +238,76 @@
     let autumnOpacity = 0;
     let winterOpacity = 0;
 
+    let summerIcon = "fa-solid fa-sun"
+    let winterIcon = "fa-solid fa-snowflake"
+    let autumnIcon = "fa-solid fa-leaf"
+    let springIcon = "fa-solid fa-seedling"
+
+    let summerTitle = "Poletje"
+    let winterTitle = "Zima"
+    let autumnTitle = "Jesen"
+    let springTitle = "Pomlad"
+
+    let summerColor = "orange"
+    let winterColor = "lightblue"
+    let autumnColor = "brown"
+    let springColor = "green"
+
+    let seasonIcon = summerIcon;
+    let seasonTitle = summerTitle;
+    let seasonColor = summerColor;
+
     if(seasonIndex <= 0.25) {
       let currentSeasonIndex = easeInOutCubic(seasonIndex / 0.25)
       springOpacity = 1 - currentSeasonIndex
       summerOpacity = currentSeasonIndex
+
+      
 
     } else if(seasonIndex <= 0.5) {
       let currentSeasonIndex = easeInOutCubic((seasonIndex - 0.25) / 0.25)
       summerOpacity = 1 - currentSeasonIndex
       autumnOpacity = currentSeasonIndex
 
+      
+
     } else if(seasonIndex <= 0.75) {
       let currentSeasonIndex = easeInOutCubic((seasonIndex - 0.5) / 0.25)
       autumnOpacity = 1 - currentSeasonIndex
       winterOpacity = currentSeasonIndex
+
+      
     } else {
       let currentSeasonIndex = easeInOutCubic((seasonIndex - 0.75) / 0.25)
       winterOpacity = 1 - currentSeasonIndex
       springOpacity = currentSeasonIndex
+
+      
+    }
+
+    let snowOpacity = 0
+
+    if (seasonIndex <= 0.125) {
+      seasonIcon = springIcon
+      seasonTitle = springTitle
+      seasonColor = springColor
+    } else if (seasonIndex <= 0.375) {
+      seasonIcon = summerIcon
+      seasonTitle = summerTitle
+      seasonColor = summerColor
+    } else if (seasonIndex <= 0.625) {
+      seasonIcon = autumnIcon
+      seasonTitle = autumnTitle
+      seasonColor = autumnColor
+    } else if (seasonIndex <= 0.875) {
+      seasonIcon = winterIcon
+      seasonTitle = winterTitle
+      seasonColor = winterColor
+      snowOpacity = 1
+    } else {
+      seasonIcon = springIcon
+      seasonTitle = springTitle
+      seasonColor = springColor
     }
 
     var root = document.body;
@@ -200,16 +315,26 @@
     root.style.setProperty('--summer-opacity', summerOpacity);
     root.style.setProperty('--autumn-opacity', autumnOpacity);
     root.style.setProperty('--winter-opacity', winterOpacity);
-
-    if(seasonIndex > 0.5 && seasonIndex < 0.75) {
-      root.style.setProperty('--snow-opacity', 1);
-
-    } else {
-      root.style.setProperty('--snow-opacity', 0);
-    }
+    root.style.setProperty('--snow-opacity', snowOpacity);
+    root.style.setProperty('--season-icon-color', seasonColor)
+    seasonTitleElement.innerText = seasonTitle
+    replaceClasses(seasonIconElement, seasonIcon)
 
   }
   });
+
+  function replaceClasses(element, newClassList) {
+  // Remove all existing classes
+  element.className = '';
+
+  // Add the new classes
+  if (newClassList && typeof newClassList === 'string') {
+    var classes = newClassList.trim().split(/\s+/);
+    classes.forEach(function(className) {
+      element.classList.add(className);
+    });
+  }
+}
 
   
   </script>
