@@ -24,6 +24,7 @@
     --autumn-opacity: 0;
     --winter-opacity: 0;
     --snow-opacity: 0;
+    --rain-opacity: 0;
     --season-icon-color: green;
     font-family: 'Helvetica', sans-serif;
   }
@@ -84,6 +85,18 @@
     z-index: 10;
     background-image: url('res/snow03.gif');
     opacity: var(--snow-opacity);
+    transition: opacity 0.5s ease;
+  }
+
+  #rainOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background-image: url('res/rain.gif');
+    opacity: var(--rain-opacity);
     transition: opacity 0.5s ease;
   }
 
@@ -148,6 +161,10 @@
     <div>
       <button id="audioToggle">Toggle Audio</button>
     </div>
+    <div>
+      <button id="setWheater" style="border-radius: 0.5rem;">Začni/ustavi vreme</button><br>
+
+    </div>
     
   </div>
 
@@ -161,10 +178,12 @@
   <img src="res/autumn.svg" id="autumn">
   <img src="res/winter.svg" id="winter">
   <div id="snowOverlay"></div>
+  <div id="rainOverlay"></div>
 
 </div>
 
 <script>
+      let isWeather;
 
   // Load audio
   const natureAudio = new Audio('res/audio/nature.mp3');
@@ -199,6 +218,15 @@
         lastTime = performance.now() / 1000
     window.requestAnimationFrame(increase)
       }
+
+      
+    document.getElementById('setWheater').addEventListener('click', () => {
+      if(isWeather){
+        isWeather = false;
+      } else{
+        isWeather = true;
+      }
+    })
   })
 
   document.getElementById('audioToggle').addEventListener('click', () => {
@@ -209,7 +237,6 @@
       natureAudio.pause();
       winterAudio.pause();
     }
-      
       
   })
 
@@ -316,6 +343,7 @@
     let snowOpacity = 0
     let natureAudioVolume = 0
     let winterAudioVolume = 0
+    let rainOpacity = 0
 
     if (seasonIndex <= 0.125) {
       seasonIcon = springIcon
@@ -336,7 +364,6 @@
       seasonIcon = winterIcon
       seasonTitle = winterTitle
       seasonColor = winterColor
-      snowOpacity = 1
       winterAudioVolume = 1
     } else {
       seasonIcon = springIcon
@@ -345,12 +372,23 @@
       natureAudioVolume = 1
     }
 
+    console.log(isWeather)
+
+    if (isWeather){
+      if (seasonIndex >= 0.625 && seasonIndex <= 0.875){
+        snowOpacity = 1
+      } else{
+        rainOpacity = 1
+      }
+    }
+
     var root = document.body;
     root.style.setProperty('--spring-opacity', springOpacity);
     root.style.setProperty('--summer-opacity', summerOpacity);
     root.style.setProperty('--autumn-opacity', autumnOpacity);
     root.style.setProperty('--winter-opacity', winterOpacity);
     root.style.setProperty('--snow-opacity', snowOpacity);
+    root.style.setProperty('--rain-opacity', rainOpacity);
     root.style.setProperty('--season-icon-color', seasonColor)
     seasonTitleElement.innerText = seasonTitle
     replaceClasses(seasonIconElement, seasonIcon)
