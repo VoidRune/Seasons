@@ -97,6 +97,36 @@
     transition: opacity 0.5s ease;
   }
 
+  .leaves {
+    position: absolute;
+    
+	  object-fit: cover;
+    transform: translate(-50%, -50%);
+    background-image: url('res/autumn/leaves.gif');
+    transition: opacity 0.5s ease;
+  }
+
+  .leaves-1 {
+    top: 120%;
+    left: 55%;
+    width: 17.5%;
+    height: 30%;
+  }
+
+  .leaves-2 {
+    top: 130%;
+    left: 75%;
+    width: 17.5%;
+    height: 30%;
+  }
+
+  .leaves-3 {
+    top: 100%;
+    left: 107.5%;
+    width: 15%;
+    height: 15%;
+  }
+
   #currentSeasonText {
     display: flex;
     gap: 0.5rem;
@@ -168,42 +198,45 @@
 </div>
 
 <div class="isolate">
-  <img src="res/summer/background1.svg" class="summer layer-1">
-<img src="res/spring/background1.svg" class="spring layer-1">
-<img src="res/summer/background1.svg" class="summer layer-1">
-<img src="res/autumn/background1.svg" class="autumn layer-1">
-<img src="res/winter/background1.svg" class="winter layer-1">
+  <img src="res/summer/background1.svg" class="summer layer-1 parallax">
+<img src="res/spring/background1.svg" class="spring layer-1 parallax">
+<img src="res/summer/background1.svg" class="summer layer-1 parallax">
+<img src="res/autumn/background1.svg" class="autumn layer-1 parallax">
+<img src="res/winter/background1.svg" class="winter layer-1 parallax">
 
-<img src="res/summer/sun2.svg" class="summer layer-2">
-<img src="res/spring/sun2.svg" class="spring layer-2">
-<img src="res/summer/sun2.svg" class="summer layer-2">
-<img src="res/autumn/sun2.svg" class="autumn layer-2">
-<img src="res/winter/sun2.svg" class="winter layer-2">
+<img src="res/summer/sun2.svg" class="summer layer-2 parallax">
+<img src="res/spring/sun2.svg" class="spring layer-2 parallax">
+<img src="res/summer/sun2.svg" class="summer layer-2 parallax">
+<img src="res/autumn/sun2.svg" class="autumn layer-2 parallax">
+<img src="res/winter/sun2.svg" class="winter layer-2 parallax">
 
-<img src="res/summer/mountains3.svg" class="summer layer-3">
-<img src="res/spring/mountains3.svg" class="spring layer-3">
-<img src="res/summer/mountains3.svg" class="summer layer-3">
-<img src="res/autumn/mountains3.svg" class="autumn layer-3">
-<img src="res/winter/mountains3.svg" class="winter layer-3">
+<img src="res/summer/mountains3.svg" class="summer layer-3 parallax">
+<img src="res/spring/mountains3.svg" class="spring layer-3 parallax">
+<img src="res/summer/mountains3.svg" class="summer layer-3 parallax">
+<img src="res/autumn/mountains3.svg" class="autumn layer-3 parallax">
+<img src="res/winter/mountains3.svg" class="winter layer-3 parallax">
 
-<img src="res/summer/hills4.svg" class="summer layer-4">
-<img src="res/spring/hills4.svg" class="spring layer-4">
-<img src="res/summer/hills4.svg" class="summer layer-4">
-<img src="res/autumn/hills4.svg" class="autumn layer-4">
-<img src="res/winter/hills4.svg" class="winter layer-4">
+<img src="res/summer/hills4.svg" class="summer layer-4 parallax">
+<img src="res/spring/hills4.svg" class="spring layer-4 parallax">
+<img src="res/summer/hills4.svg" class="summer layer-4 parallax">
+<img src="res/autumn/hills4.svg" class="autumn layer-4 parallax">
+<img src="res/winter/hills4.svg" class="winter layer-4 parallax">
 
-<img src="res/summer/lake5.svg" class="summer layer-5">
-<img src="res/spring/lake5.svg" class="spring layer-5">
-<img src="res/summer/lake5.svg" class="summer layer-5">
-<img src="res/autumn/lake5.svg" class="autumn layer-5">
-<img src="res/winter/lake5.svg" class="winter layer-5">
+<img src="res/summer/lake5.svg" class="summer layer-5 parallax">
+<img src="res/spring/lake5.svg" class="spring layer-5 parallax">
+<img src="res/summer/lake5.svg" class="summer layer-5 parallax">
+<img src="res/autumn/lake5.svg" class="autumn layer-5 parallax">
+<img src="res/winter/lake5.svg" class="winter layer-5 parallax">
 
-<img src="res/summer/vegetation6.svg" class="summer layer-6">
-<img src="res/spring/vegetation6.svg" class="spring layer-6">
-<img src="res/summer/vegetation6.svg" class="summer layer-6">
-<img src="res/autumn/vegetation6.svg" class="autumn layer-6">
-<img src="res/winter/vegetation6.svg" class="winter layer-6">
+<img src="res/summer/vegetation6.svg" class="summer layer-6 parallax">
+<img src="res/spring/vegetation6.svg" class="spring layer-6 parallax">
+<img src="res/summer/vegetation6.svg" class="summer layer-6 parallax">
+<img src="res/autumn/vegetation6.svg" class="autumn layer-6 parallax">
+<img src="res/winter/vegetation6.svg" class="winter layer-6 parallax">
 
+<div class="leaves layer-6 parallax autumn leaves-1"></div>
+<div class="leaves layer-6 parallax autumn leaves-2"></div>
+<div class="leaves layer-6 parallax autumn leaves-3"></div>
 
   <div id="snowOverlay"></div>
   <div id="rainOverlay"></div>
@@ -268,7 +301,7 @@
   })
 
   document.addEventListener('mousemove', (e) => {
-    let layers = document.querySelectorAll('img');
+    let layers = document.querySelectorAll('.parallax');
     layers.forEach((layer) => {
         // Extract the layer number from the class name
         let layerClass = Array.from(layer.classList).find(cls => cls.startsWith('layer-'));
