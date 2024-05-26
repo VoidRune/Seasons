@@ -338,16 +338,6 @@
         layer.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
     });
 
-    window.innerWidth
-    // Calculate the position for the sun
-    let sliderValue2 = slider.value / slider.max
-    const sunX = sliderValue2 * (window.innerWidth + 400) - 200;
-    const sunY = 50 + 1000 * (0.5 - sliderValue2) * (0.5 - sliderValue2);
-
-    console.log(sunX)
-
-
-    sun.style.transform = `translate(${sunX}px, ${sunY}px)`;
 });
 
 
@@ -491,6 +481,12 @@
         rainOpacity = 1
       }
     }
+
+    // Sun movement
+    let sliderValue2 = slider.value / slider.max
+    const sunX = sliderValue2 * (window.innerWidth + 400) - 200;
+    const sunY = 50 + 1000 * (0.5 - sliderValue2) * (0.5 - sliderValue2);
+    sun.style.transform = `translate(${sunX}px, ${sunY}px)`;
 
     var root = document.body;
     root.style.setProperty('--spring-opacity', springOpacity);
