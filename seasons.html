@@ -73,8 +73,16 @@
   }
 
 
-  #snowOverlay {
+  #sun {
     position: absolute;
+    top: -100px; left: -100px;
+    width: 200px; /* Adjust size as needed */
+    height: 200px; /* Adjust size as needed */
+    transition: transform 0.1s ease; /* Smooth transition */
+  }
+
+  #snowOverlay {
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -168,42 +176,38 @@
 </div>
 
 <div class="isolate">
+
   <img src="res/summer/background1.svg" class="summer layer-1">
-<img src="res/spring/background1.svg" class="spring layer-1">
-<img src="res/summer/background1.svg" class="summer layer-1">
-<img src="res/autumn/background1.svg" class="autumn layer-1">
-<img src="res/winter/background1.svg" class="winter layer-1">
+  <img src="res/spring/background1.svg" class="spring layer-1">
+  <img src="res/summer/background1.svg" class="summer layer-1">
+  <img src="res/autumn/background1.svg" class="autumn layer-1">
+  <img src="res/winter/background1.svg" class="winter layer-1">
+  
+  <img src="res/sun.svg" class="sun layer-2" id="sun">
 
-<img src="res/summer/sun2.svg" class="summer layer-2">
-<img src="res/spring/sun2.svg" class="spring layer-2">
-<img src="res/summer/sun2.svg" class="summer layer-2">
-<img src="res/autumn/sun2.svg" class="autumn layer-2">
-<img src="res/winter/sun2.svg" class="winter layer-2">
+  <img src="res/summer/mountains3.svg" class="summer layer-3">
+  <img src="res/spring/mountains3.svg" class="spring layer-3">
+  <img src="res/summer/mountains3.svg" class="summer layer-3">
+  <img src="res/autumn/mountains3.svg" class="autumn layer-3">
+  <img src="res/winter/mountains3.svg" class="winter layer-3">
 
-<img src="res/summer/mountains3.svg" class="summer layer-3">
-<img src="res/spring/mountains3.svg" class="spring layer-3">
-<img src="res/summer/mountains3.svg" class="summer layer-3">
-<img src="res/autumn/mountains3.svg" class="autumn layer-3">
-<img src="res/winter/mountains3.svg" class="winter layer-3">
+  <img src="res/summer/hills4.svg" class="summer layer-4">
+  <img src="res/spring/hills4.svg" class="spring layer-4">
+  <img src="res/summer/hills4.svg" class="summer layer-4">
+  <img src="res/autumn/hills4.svg" class="autumn layer-4">
+  <img src="res/winter/hills4.svg" class="winter layer-4">
 
-<img src="res/summer/hills4.svg" class="summer layer-4">
-<img src="res/spring/hills4.svg" class="spring layer-4">
-<img src="res/summer/hills4.svg" class="summer layer-4">
-<img src="res/autumn/hills4.svg" class="autumn layer-4">
-<img src="res/winter/hills4.svg" class="winter layer-4">
+  <img src="res/summer/lake5.svg" class="summer layer-5">
+  <img src="res/spring/lake5.svg" class="spring layer-5">
+  <img src="res/summer/lake5.svg" class="summer layer-5">
+  <img src="res/autumn/lake5.svg" class="autumn layer-5">
+  <img src="res/winter/lake5.svg" class="winter layer-5">
 
-<img src="res/summer/lake5.svg" class="summer layer-5">
-<img src="res/spring/lake5.svg" class="spring layer-5">
-<img src="res/summer/lake5.svg" class="summer layer-5">
-<img src="res/autumn/lake5.svg" class="autumn layer-5">
-<img src="res/winter/lake5.svg" class="winter layer-5">
-
-<img src="res/summer/vegetation6.svg" class="summer layer-6">
-<img src="res/spring/vegetation6.svg" class="spring layer-6">
-<img src="res/summer/vegetation6.svg" class="summer layer-6">
-<img src="res/autumn/vegetation6.svg" class="autumn layer-6">
-<img src="res/winter/vegetation6.svg" class="winter layer-6">
-
+  <img src="res/summer/vegetation6.svg" class="summer layer-6">
+  <img src="res/spring/vegetation6.svg" class="spring layer-6">
+  <img src="res/summer/vegetation6.svg" class="summer layer-6">
+  <img src="res/autumn/vegetation6.svg" class="autumn layer-6">
+  <img src="res/winter/vegetation6.svg" class="winter layer-6">
 
   <div id="snowOverlay"></div>
   <div id="rainOverlay"></div>
@@ -221,7 +225,8 @@
   natureAudio.volume = 0
   winterAudio.volume = 0
 
-  
+  const sun = document.getElementById('sun');
+  let sliderValue = 0
 
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -299,6 +304,17 @@
         // Apply the transform
         layer.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
     });
+
+    window.innerWidth
+    // Calculate the position for the sun
+    let sliderValue2 = slider.value / slider.max
+    const sunX = sliderValue2 * (window.innerWidth + 400) - 200;
+    const sunY = 50 + 1000 * (0.5 - sliderValue2) * (0.5 - sliderValue2);
+
+    console.log(sunX)
+
+
+    sun.style.transform = `translate(${sunX}px, ${sunY}px)`;
 });
 
 
@@ -315,8 +331,6 @@
   }
 
   let lastTime = performance.now() / 1000
-  let sliderValue = 0
-
 
   function increase() {
     if(!isAuto) {
