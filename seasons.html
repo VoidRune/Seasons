@@ -81,6 +81,25 @@
     transition: transform 0.1s ease; /* Smooth transition */
   }
 
+  .cloud {
+    position: absolute;
+    top: 10%;
+    left: 100vw;
+    width: 10%;
+    height: auto;
+    opacity: 0.95;
+    animation: moveClouds 150s linear infinite;
+  }
+
+  @keyframes moveClouds {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-120vw);
+  }
+}
+
   #snowOverlay {
     position: fixed;
     top: 0;
@@ -206,7 +225,7 @@
 </div>
 
 <div class="isolate">
-  <img src="res/summer/background1.svg" class="summer layer-1 parallax">
+<img src="res/summer/background1.svg" class="summer layer-1 parallax">
 <img src="res/spring/background1.svg" class="spring layer-1 parallax">
 <img src="res/summer/background1.svg" class="summer layer-1 parallax">
 <img src="res/autumn/background1.svg" class="autumn layer-1 parallax">
@@ -265,6 +284,30 @@
   document.addEventListener('DOMContentLoaded', function() {
     const slider = document.getElementById('seasonSlider');
     let animationTime = 10
+
+  function createCloud() {
+    const cloud = document.createElement('img');
+    cloud.src = `res/clouds/cloud${Math.floor(Math.random() * 6.9) + 1}.svg`;
+    cloud.className = 'cloud layer-2';
+
+    // Set a random top position between 0% and 100%
+    const randomTop = Math.random() * 25;
+    cloud.style.top = `${randomTop}%`;
+    cloud.style.width = `${Math.random() * 20}%`
+
+    const randomTime = 150 + Math.random() * 300
+    cloud.style.animation = `moveClouds ${randomTime}s linear infinite`;
+    cloud.style.animationDelay = `-${Math.random() * randomTime}s`;
+
+    console.log("cloud")
+    //document.body.appendChild(cloud);
+    sun.insertAdjacentElement('afterend', cloud)
+  }
+
+  // Create multiple clouds
+  for (let i = 0; i < 10; i++) { // Adjust the number of clouds as needed
+    createCloud();
+  }
 
 
     slider.addEventListener('input', function() {
