@@ -154,6 +154,22 @@
     height: 18%;
   }
 
+  .duck {
+    position: absolute;
+	  object-fit: cover;
+
+    transform: translate(-50%, -50%);
+
+    top: 100%;
+    left: 107.5%;
+    width: 10%;
+    height: 18%;
+    background-image: url('res/duckAnim.gif');
+    transition: opacity 0.5s ease;
+
+  }
+
+
   #currentSeasonText {
     display: flex;
     gap: 0.5rem;
@@ -256,11 +272,14 @@
 <div class="leaves layer-6 parallax autumn leaves-2"></div>
 <div class="leaves layer-6 parallax autumn leaves-3"></div>
 
+
 <img src="res/summer/vegetation6.svg" class="layer-6 parallax">
 <img src="res/spring/vegetation6.svg" class="spring layer-6 parallax">
 <img src="res/summer/vegetation6.svg" class="summer layer-6 parallax">
 <img src="res/autumn/vegetation6.svg" class="autumn layer-6 parallax">
 <img src="res/winter/vegetation6.svg" class="winter layer-6 parallax">
+
+<div class="duck spring layer-6 parallax"></div>
 
   <div id="snowOverlay"></div>
   <div id="rainOverlay"></div>
@@ -299,7 +318,7 @@
     // Set a random top position between 0% and 100%
     const randomTop = Math.random() * 25;
     cloud.style.top = `${randomTop}%`;
-    cloud.style.width = `${Math.random() * 20}%`
+    cloud.style.width = `${5 + Math.random() * 10}%`
 
     const randomTime = 150 + Math.random() * 300
     cloud.style.animation = `moveClouds ${randomTime}s linear infinite`;
