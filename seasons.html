@@ -206,6 +206,7 @@
 </div>
 
 <div class="isolate">
+  <video style="opacity: 0; position: fixed;"></video>
   <img src="res/summer/background1.svg" class="summer layer-1 parallax">
 <img src="res/spring/background1.svg" class="spring layer-1 parallax">
 <img src="res/summer/background1.svg" class="summer layer-1 parallax">
@@ -262,7 +263,10 @@
   let sliderValue = 0
 
 
+
   document.addEventListener('DOMContentLoaded', function() {
+
+
     const slider = document.getElementById('seasonSlider');
     let animationTime = 10
 
@@ -526,5 +530,13 @@
 
   
   </script>
+  
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"> </script> 
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection"></script>
+  <script type="module" src="res/js/HandControls.js"></script>
+
 </body>
 </html>
