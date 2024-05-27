@@ -14,10 +14,8 @@ class HandControls {
 
         const scope = this;
 
-        console.log(handPoseDetection.SupportedModels)
-
         const model = handPoseDetection.SupportedModels.MediaPipeHands;
-        console.log(model)
+
         const detectorConfig = {
             runtime: 'mediapipe', // or 'tfjs',
             solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
@@ -72,7 +70,6 @@ class HandControls {
         this.detector.estimateHands(this.videoElement, this.estimationConfig)
         .then((hands) => {
             
-            console.log(hands)
             this.visibleHands = hands.length;
             let controlHand = null;
             let secondHand = null;

@@ -216,7 +216,7 @@
       <button id="audioToggle">Toggle Audio</button>
     </div>
     <div>
-      <button id="setWheater" style="border-radius: 0.5rem;">Začni/ustavi vreme</button><br>
+      <button id="weatherToggle" style="border-radius: 0.5rem;">Začni/ustavi vreme</button><br>
 
     </div>
     
@@ -268,15 +268,17 @@
 </div>
 
 <script>
-      let isWeather;
+      let isWeather = false;
 
   // Load audio
   const natureAudio = new Audio('res/audio/nature.mp3');
+  const rainAudio = new Audio('res/audio/rain.mp3')
   const winterAudio = new Audio('res/audio/winter.mp3');
 
   // Play both audio files
   natureAudio.volume = 0
   winterAudio.volume = 0
+  rainAudio.volume = 0
 
   const sun = document.getElementById('sun');
   let sliderValue = 0
@@ -333,23 +335,29 @@
       }
 
       
-    document.getElementById('setWheater').addEventListener('click', () => {
+    
+  })
+
+  document.getElementById('weatherToggle').addEventListener('click', () => {
       if(isWeather){
         isWeather = false;
       } else{
         isWeather = true;
       }
+      drawImages()
     })
-  })
 
   document.getElementById('audioToggle').addEventListener('click', () => {
     if(natureAudio.paused) {
       natureAudio.play();
       winterAudio.play();
+      rainAudio.play()
     } else {
       natureAudio.pause();
       winterAudio.pause();
-    }  
+      rainAudio.pause()
+    }
+    drawImages()
   })
 
   document.addEventListener('mousemove', (e) => {
@@ -488,9 +496,11 @@
     }
 
     let snowOpacity = 0
+    let rainOpacity = 0
+
     let natureAudioVolume = 0
     let winterAudioVolume = 0
-    let rainOpacity = 0
+    let rainAudioVolume = 0
 
     if (seasonIndex <= 0.125) {
       seasonIcon = springIcon
@@ -526,6 +536,8 @@
         snowOpacity = 1
       } else{
         rainOpacity = 1
+        natureAudioVolume = 0
+        rainAudioVolume = 1
       }
     }
 
@@ -547,7 +559,9 @@
     replaceClasses(seasonIconElement, seasonIcon)
 
     winterAudio.volume = winterAudioVolume
+    rainAudio.volume = rainAudioVolume
     natureAudio.volume = natureAudioVolume
+
 
   }
   });
