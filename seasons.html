@@ -81,6 +81,25 @@
     transition: transform 0.1s ease; /* Smooth transition */
   }
 
+  .cloud {
+    position: absolute;
+    top: 10%;
+    left: 100vw;
+    width: 10%;
+    height: auto;
+    opacity: 0.95;
+    animation: moveClouds 150s linear infinite;
+  }
+
+  @keyframes moveClouds {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-120vw);
+  }
+}
+
   #snowOverlay {
     position: fixed;
     top: 0;
@@ -270,6 +289,30 @@
     const slider = document.getElementById('seasonSlider');
     let animationTime = 10
 
+  function createCloud() {
+    const cloud = document.createElement('img');
+    cloud.src = `res/clouds/cloud${Math.floor(Math.random() * 6.9) + 1}.svg`;
+    cloud.className = 'cloud layer-2';
+
+    // Set a random top position between 0% and 100%
+    const randomTop = Math.random() * 25;
+    cloud.style.top = `${randomTop}%`;
+    cloud.style.width = `${Math.random() * 20}%`
+
+    const randomTime = 150 + Math.random() * 300
+    cloud.style.animation = `moveClouds ${randomTime}s linear infinite`;
+    cloud.style.animationDelay = `-${Math.random() * randomTime}s`;
+
+    console.log("cloud")
+    //document.body.appendChild(cloud);
+    sun.insertAdjacentElement('afterend', cloud)
+  }
+
+  // Create multiple clouds
+  for (let i = 0; i < 10; i++) { // Adjust the number of clouds as needed
+    createCloud();
+  }
+
 
     slider.addEventListener('input', function() {
       drawImages()
@@ -342,16 +385,6 @@
         layer.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
     });
 
-    window.innerWidth
-    // Calculate the position for the sun
-    let sliderValue2 = slider.value / slider.max
-    const sunX = sliderValue2 * (window.innerWidth + 400) - 200;
-    const sunY = 50 + 1000 * (0.5 - sliderValue2) * (0.5 - sliderValue2);
-
-    console.log(sunX)
-
-
-    sun.style.transform = `translate(${sunX}px, ${sunY}px)`;
 });
 
 
@@ -495,6 +528,12 @@
         rainOpacity = 1
       }
     }
+
+    // Sun movement
+    let sliderValue2 = slider.value / slider.max
+    const sunX = sliderValue2 * (window.innerWidth + 400) - 200;
+    const sunY = 50 + 1000 * (0.5 - sliderValue2) * (0.5 - sliderValue2);
+    sun.style.transform = `translate(${sunX}px, ${sunY}px)`;
 
     var root = document.body;
     root.style.setProperty('--spring-opacity', springOpacity);
