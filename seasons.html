@@ -156,17 +156,14 @@
 
   .duck {
     position: absolute;
-	  object-fit: cover;
 
     transform: translate(-50%, -50%);
 
-    top: 100%;
+    top: 125%;
     left: 107.5%;
-    width: 10%;
-    height: 18%;
-    background-image: url('res/duckAnim.gif');
-    transition: opacity 0.5s ease;
-
+    width: 5%;
+    height: auto;
+    object-fit: cover;
   }
 
 
@@ -235,6 +232,10 @@
       <button id="weatherToggle" style="border-radius: 0.5rem;">Začni/ustavi vreme</button><br>
 
     </div>
+    <div>
+      <button id="handToggle" style="border-radius: 0.5rem;">Začni/ustavi tracking</button><br>
+
+    </div>
     
   </div>
 
@@ -279,10 +280,12 @@
 <img src="res/autumn/vegetation6.svg" class="autumn layer-6 parallax">
 <img src="res/winter/vegetation6.svg" class="winter layer-6 parallax">
 
-<div class="duck spring layer-6 parallax"></div>
 
   <div id="snowOverlay"></div>
   <div id="rainOverlay"></div>
+
+  <img class="duck layer-6 parallax spring" src="res/duckAnim.gif"></img>
+
 
 </div>
 
@@ -301,6 +304,40 @@
 
   const sun = document.getElementById('sun');
   let sliderValue = 0
+
+  function applyParallax(xValue, yValue) {
+    let layers = document.querySelectorAll('.parallax');
+    layers.forEach((layer) => {
+        // Extract the layer number from the class name
+        let layerClass = Array.from(layer.classList).find(cls => cls.startsWith('layer-'));
+        let layerNumber = parseInt(layerClass.split('-')[1]);
+        
+        // Calculate the speed based on the layer number
+        let speed;
+        let zoom;
+        if (layerNumber >= 4) {
+            speed = 1; // Maximum speed for the first three layers
+            zoom = 1.1
+        } else if (layerNumber >= 3) {
+            speed = 0.5; // Slower speed for the fourth layer
+            zoom = 1.05
+        } else {
+            speed = 0; // No movement for the last layer
+            zoom = 1
+        }
+        
+        // Calculate offsets from the center of the window
+        let xOffset = xValue - window.innerWidth / 2;
+        let yOffset = yValue - window.innerHeight / 2;
+        
+        // Calculate the position for the transform
+        let x = -xOffset * speed / 10 - window.innerWidth/2;
+        let y = -yOffset * speed / 10 - window.innerHeight/2;
+        
+        // Apply the transform
+        layer.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
+    });
+  }
 
 
 
@@ -380,37 +417,8 @@
   })
 
   document.addEventListener('mousemove', (e) => {
-    let layers = document.querySelectorAll('.parallax');
-    layers.forEach((layer) => {
-        // Extract the layer number from the class name
-        let layerClass = Array.from(layer.classList).find(cls => cls.startsWith('layer-'));
-        let layerNumber = parseInt(layerClass.split('-')[1]);
-        
-        // Calculate the speed based on the layer number
-        let speed;
-        let zoom;
-        if (layerNumber >= 4) {
-            speed = 1; // Maximum speed for the first three layers
-            zoom = 1.1
-        } else if (layerNumber >= 3) {
-            speed = 0.5; // Slower speed for the fourth layer
-            zoom = 1.05
-        } else {
-            speed = 0; // No movement for the last layer
-            zoom = 1
-        }
-        
-        // Calculate offsets from the center of the window
-        let xOffset = e.pageX - window.innerWidth / 2;
-        let yOffset = e.pageY - window.innerHeight / 2;
-        
-        // Calculate the position for the transform
-        let x = -xOffset * speed / 10 - window.innerWidth/2;
-        let y = -yOffset * speed / 10 - window.innerHeight/2;
-        
-        // Apply the transform
-        layer.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
-    });
+
+    applyParallax(e.pageX, e.pageY)
 
 });
 

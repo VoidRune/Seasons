@@ -98,27 +98,26 @@ class HandControls {
                     }
                 });
 
-                if(secondHand) {
-                    secondHand.keypoints3D.forEach(element => {
-                        if(element.name === "index_finger_tip") {
-                            indexFingerPosition.x = element.x;
-                            indexFingerPosition.y = element.y;
-                            indexFingerPosition.z = element.z;
-                        } else if (element.name === "thumb_tip") {
-                            thumbPosition.x = element.x;
-                            thumbPosition.y = element.y;
-                            thumbPosition.z = element.z;
-                        }
-                    })
-                    this.thumbIndexDistance = Math.sqrt(Math.pow(indexFingerPosition.x - thumbPosition.x, 2) + Math.pow(indexFingerPosition.y - thumbPosition.y, 2) + Math.pow(indexFingerPosition.z - thumbPosition.z, 2))
-                } else {
-                    this.thumbIndexDistance = 0;
-                }
+                
                 
 
                 
             } else {
                 this.pointer = {x: window.innerWidth/2, y: window.innerHeight/2}
+            }
+
+            if(secondHand) {
+                secondHand.keypoints.forEach(element => {
+                    if(element.name === "index_finger_tip") {
+
+                        const newX = (element.x)/this.videoElement.videoWidth * window.innerWidth;
+                        const newY = (element.y)/this.videoElement.videoHeight * window.innerHeight;
+                        console.log(newX)
+                        console.log(newY)
+                        applyParallax(newX, newY)
+
+                    }
+                })
             }
             
         })
@@ -152,7 +151,13 @@ class HandControls {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    
     const handControls = new HandControls(document.querySelector("video"))
-    handControls.start()
+    document.getElementById('handToggle').addEventListener('click', () => {
+        if(handControls.isEstimating) {
+            handControls.stop()
+        } else {
+            handControls.start()
+        }
+    })
+    
 })
